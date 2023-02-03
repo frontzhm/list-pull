@@ -1,6 +1,7 @@
 # list-pull
 
-一个用于 H5 的列表组件，可以下拉刷新和上拉加载。
+一个用于 H5 的 vue 列表组件，可以下拉刷新和上拉加载。
+最简单参数是`apiList`。
 
 ## 安装
 
@@ -43,7 +44,7 @@ export default {
 
 ### 页面特定高度元素内刷新
 
-页面中如果特定元素限定高度内刷新的话，css设定高度。
+页面中如果特定元素限定高度内刷新的话，css 设定高度。
 数据为空的时候，需要设定位置
 
 ```less
@@ -55,7 +56,6 @@ export default {
   top: 10%;
 }
 ```
-
 
 ## 属性
 
@@ -88,8 +88,6 @@ export default {
 
 ## 组件逻辑
 
-
-
 ## 组件代码和组件逻辑注释
 
 ```vue
@@ -99,7 +97,6 @@ export default {
     :success-text="textRefreshSuccess"
     @refresh="onTopPullRefresh"
     :disabled="isDisabledRefresh"
-    
   >
     <template v-if="list.length">
       <van-list
@@ -123,9 +120,9 @@ export default {
   </van-pull-refresh>
 </template>
 <script>
-import { PullRefresh as vanPullRefresh, List as vanList, Toast } from "vant";
-import "vant/lib/pull-refresh/style";
-import "vant/lib/list/style";
+import { PullRefresh as vanPullRefresh, List as vanList, Toast } from 'vant';
+import 'vant/lib/pull-refresh/style';
+import 'vant/lib/list/style';
 const configInit = {
   isEnd: false,
   isInitLoading: false,
@@ -134,7 +131,7 @@ const configInit = {
 };
 
 export default {
-  name: "list-pull",
+  name: 'list-pull',
   props: {
     apiList: Function,
     pageSize: {
@@ -147,16 +144,17 @@ export default {
       default: false,
     },
     textEmpty: {
-      default: "暂无数据~",
+      default: '暂无数据~',
     },
     imgEmpty: {
-      default: "https://blog-huahua.oss-cn-beijing.aliyuncs.com/blog/code/empty2.png",
+      default:
+        'https://blog-huahua.oss-cn-beijing.aliyuncs.com/blog/code/empty2.png',
     },
     textEnd: {
-      default: "已经到底了~",
+      default: '已经到底了~',
     },
     textRefreshSuccess: {
-      default: "刷新成功",
+      default: '刷新成功',
     },
   },
   components: {
@@ -199,7 +197,7 @@ export default {
     /** 初始请求，需要显示加载图标，且请求完成之后，设置请求过的flag，以控制空状态的显示和是否能刷新 */
     async requestInit() {
       const toast = Toast.loading({
-        message: "加载中...",
+        message: '加载中...',
         forbidClick: true,
       });
       this.list = await this._apiListRequest();
@@ -314,5 +312,4 @@ export default {
   margin-top: 10px;
 }
 </style>
-
 ```
