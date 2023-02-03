@@ -33,7 +33,7 @@ export default Vue.extend({
 
 <template>
   <div id="app">
-    <list-pull class="pull-box" :apiList="apiListFormat" offset="500">
+    <list-pull class="pull-box" :apiList="apiListFormat">
       <template #item="item">
         <div class="item">{{ item.className }}</div>
       </template>

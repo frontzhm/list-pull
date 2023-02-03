@@ -5,14 +5,16 @@
 ## 安装
 
 ```shell
-yarn add @xdf/list-pull
+# yarn add list-pull
+npm i list-pull
+
 ```
 
-## 使用
+## 简单使用
 
 ```vue
 <template>
-  <list-pull :apiList="apiListFormat" class="list">
+  <list-pull :apiList="apiListFormat" class="list-pull">
     <template #item="item">
       <!-- item可以是组件 或 节点，能拿到item数据 -->
       <div class="item" :key="item.id">{{ item.name }}</div>
@@ -38,6 +40,22 @@ export default {
 ```
 
 > item 里面记得加`key`属性
+
+### 页面特定高度元素内刷新
+
+页面中如果特定元素限定高度内刷新的话，css设定高度。
+数据为空的时候，需要设定位置
+
+```less
+.list-pull {
+  height: 300px;
+}
+/deep/ .empty {
+  position: absolute;
+  top: 10%;
+}
+```
+
 
 ## 属性
 
@@ -68,208 +86,9 @@ export default {
 
 ![list_pull](https://blog-huahua.oss-cn-beijing.aliyuncs.com/blog/code/list_pull.gif)
 
-## 实例展示代码
+## 组件逻辑
 
-父组件
 
-```vue
-<script>
-import ListPull from '@xdf/list-pull';
-import { resMock } from './mock';
-const sleep = () =>
-  new Promise((resolve) => {
-    setTimeout(resolve, 1000);
-  });
-export default {
-  name: 'ServeDev',
-  components: {
-    ListPull,
-  },
-  methods: {
-    async apiListFormat(params) {
-      await sleep();
-      console.log(params);
-      let res = resMock;
-      if (params.pageNo >= 3) {
-        res = { data: { ...res.data, data: { data: [] } } };
-      }
-      console.log('res', res.data);
-      const isSuccess = res.data.status === 1;
-      const data = res.data.data.data;
-      if (!isSuccess) {
-        this.$toast(res.data.message);
-      }
-      return { isSuccess, data };
-    },
-  },
-};
-</script>
-
-<template>
-  <div id="app">
-    <list-pull :apiList="apiListFormat" class="list" tabValue="1">
-      <template #item="item">
-        <div class="item">{{ item.className }}</div>
-      </template>
-    </list-pull>
-  </div>
-</template>
-<style scoped>
-.item {
-  height: 100px;
-  background-color: #f96;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 10px;
-}
-</style>
-```
-
-考虑到方便 ，加了 mock 数据，`mock.js`
-
-```js
-export const dataHas = [
-  {
-    schoolId: 20000,
-    studentCode: 'LXDF0122135589',
-    classCode: '20234005',
-    className: '小学英语寒假本地自研班',
-    status: 3,
-    startDate: '2023-01-21 08:00:00',
-    endDate: '2023-02-25 09:50:00',
-    teacherName: '乐学东方005',
-    subjectCode: '3',
-    subjectName: '英语',
-    applyId: null,
-  },
-  {
-    schoolId: 20000,
-    studentCode: 'LXDF0122135589',
-    classCode: '20234009',
-    className: '小学英语寒假本地自研班',
-    status: 3,
-    startDate: '2023-01-27 05:00:00',
-    endDate: '2023-03-03 06:50:00',
-    teacherName: '李冰冰',
-    subjectCode: '3',
-    subjectName: '英语',
-    applyId: 12,
-  },
-  {
-    schoolId: 20000,
-    studentCode: 'LXDF0122135589',
-    classCode: '20234002',
-    className: '小初衔接数学寒假好学班',
-    status: 3,
-    startDate: '2023-01-27 08:00:00',
-    endDate: '2023-02-06 09:50:00',
-    teacherName: '乐学东方一号',
-    subjectCode: '2',
-    subjectName: '数学',
-    applyId: null,
-  },
-  {
-    schoolId: 20000,
-    studentCode: 'LXDF0122135589',
-    classCode: '20231001',
-    className: '小学英语寒假本地自研班',
-    status: 3,
-    startDate: '2023-01-27 08:00:00',
-    endDate: '2023-02-06 09:50:00',
-    teacherName: '乐学东方7777',
-    subjectCode: '3',
-    subjectName: '英语',
-    applyId: null,
-  },
-  {
-    schoolId: 20000,
-    studentCode: 'LXDF0122135589',
-    classCode: '20234008',
-    className: '小学英语寒假本地自研班',
-    status: 3,
-    startDate: '2023-01-31 08:00:00',
-    endDate: '2023-03-07 09:50:00',
-    teacherName: '乐学东方一号',
-    subjectCode: '3',
-    subjectName: '英语',
-    applyId: null,
-  },
-  {
-    schoolId: 20000,
-    studentCode: 'LXDF0122135589',
-    classCode: 'TTT001',
-    className: '小初衔接数学寒假好学班',
-    status: 3,
-    startDate: '2023-02-01 08:00:00',
-    endDate: '2023-02-06 09:50:00',
-    teacherName: '',
-    subjectCode: '2',
-    subjectName: '数学',
-    applyId: null,
-  },
-  {
-    schoolId: 20000,
-    studentCode: 'LXDF0122135589',
-    classCode: '20234011',
-    className: '小初衔接数学寒假好学班',
-    status: 3,
-    startDate: '2023-02-01 08:00:00',
-    endDate: '2023-02-06 09:50:00',
-    teacherName: '',
-    subjectCode: '2',
-    subjectName: '数学',
-    applyId: null,
-  },
-  {
-    schoolId: 20000,
-    studentCode: 'LXDF0122135589',
-    classCode: '20234007',
-    className: '小学英语寒假本地自研班',
-    status: 3,
-    startDate: '2023-02-07 08:00:00',
-    endDate: '2023-03-14 09:50:00',
-    teacherName: '乐学东方002',
-    subjectCode: '3',
-    subjectName: '英语',
-    applyId: null,
-  },
-  {
-    schoolId: 20000,
-    studentCode: 'LXDF0122135589',
-    classCode: '20234012',
-    className: '小学英语寒假本地自研班',
-    status: 3,
-    startDate: '2023-02-18 08:00:00',
-    endDate: '2023-03-25 09:50:00',
-    teacherName: '乐学东方10000',
-    subjectCode: '3',
-    subjectName: '英语',
-    applyId: null,
-  },
-  {
-    schoolId: 20000,
-    studentCode: 'LXDF0122135589',
-    classCode: '20234003',
-    className: '小初衔接数学寒假好学班',
-    status: 3,
-    startDate: '2023-02-22 08:00:00',
-    endDate: '2023-03-29 09:50:00',
-    teacherName: '乐学东方7758',
-    subjectCode: '2',
-    subjectName: '数学',
-    applyId: null,
-  },
-];
-export const dataEmpty = [];
-export const data = {
-  status: 1,
-  message: '操作成功',
-  data: { data: dataHas },
-  code: '200',
-};
-export const resMock = { data };
-```
 
 ## 组件代码和组件逻辑注释
 
@@ -280,6 +99,7 @@ export const resMock = { data };
     :success-text="textRefreshSuccess"
     @refresh="onTopPullRefresh"
     :disabled="isDisabledRefresh"
+    
   >
     <template v-if="list.length">
       <van-list
@@ -294,7 +114,7 @@ export const resMock = { data };
           <slot name="item" v-bind="item"></slot>
         </template>
       </van-list>
-      <div class="tip" v-if="isEnd">{{ textEnd }}</div>
+      <div class="end-tip" v-if="isEnd">{{ textEnd }}</div>
     </template>
     <div class="empty" v-if="isShowEmptyStatus">
       <img class="img" :src="imgEmpty" alt="" />
@@ -303,17 +123,18 @@ export const resMock = { data };
   </van-pull-refresh>
 </template>
 <script>
-import { PullRefresh as vanPullRefresh, List as vanList, Toast } from 'vant';
+import { PullRefresh as vanPullRefresh, List as vanList, Toast } from "vant";
+import "vant/lib/pull-refresh/style";
+import "vant/lib/list/style";
 const configInit = {
   isEnd: false,
-  isLoading: false,
+  isInitLoading: false,
   pageNo: 1,
   isBottomPushLoading: false,
-  isTopPullLoading: false,
 };
 
 export default {
-  name: 'list-pull',
+  name: "list-pull",
   props: {
     apiList: Function,
     pageSize: {
@@ -326,17 +147,16 @@ export default {
       default: false,
     },
     textEmpty: {
-      default: '暂无数据~',
+      default: "暂无数据~",
     },
     imgEmpty: {
-      default:
-        'https://blog-huahua.oss-cn-beijing.aliyuncs.com/blog/code/xd_empty.png',
+      default: "https://blog-huahua.oss-cn-beijing.aliyuncs.com/blog/code/empty2.png",
     },
     textEnd: {
-      default: '已经到底了~',
+      default: "已经到底了~",
     },
     textRefreshSuccess: {
-      default: '刷新成功',
+      default: "刷新成功",
     },
   },
   components: {
@@ -348,6 +168,8 @@ export default {
       isAlreadyRequested: false,
       list: [],
       ...configInit,
+      // 这个不放在configInit 因为下拉的时候 isTopPullLoading是true,此时请求结果还没回来，不能设置为false
+      isTopPullLoading: false,
     };
   },
 
@@ -377,7 +199,7 @@ export default {
     /** 初始请求，需要显示加载图标，且请求完成之后，设置请求过的flag，以控制空状态的显示和是否能刷新 */
     async requestInit() {
       const toast = Toast.loading({
-        message: '加载中...',
+        message: "加载中...",
         forbidClick: true,
       });
       this.list = await this._apiListRequest();
@@ -392,10 +214,14 @@ export default {
      * 下拉主要是刷新，重置页面部分配置，然后请求，请求回来之后，手动设置isTopPullLoading，结束下拉加载状态
      * */
     async onTopPullRefresh() {
+      this.updateData();
+    },
+    async updateData() {
       this._resetConfig();
       this.list = await this._apiListRequest();
       this.isTopPullLoading = false;
     },
+
     /**
      * 底部上拉加载
      * 上拉的时候，isBottomPushLoading自动触发为true，触发onBottomPushLoad
@@ -408,8 +234,8 @@ export default {
       const isDisabledPush =
         this.isDisabledPush ||
         this.isEnd ||
-        this.isLoading ||
-        this.isRefreshing;
+        this.isInitLoading ||
+        this.isTopPullLoading;
       if (isDisabledPush) {
         this.isBottomPushLoading = false;
         return;
@@ -446,9 +272,9 @@ export default {
 };
 </script>
 <style scoped>
-.tip {
+.end-tip {
   margin-top: 20px;
-  margin-bottom: 20px;
+  padding-bottom: 20px;
   text-align: center;
   font-size: 12px;
   font-weight: 400;
@@ -456,16 +282,21 @@ export default {
   line-height: 17px;
 }
 .van-pull-refresh {
-  min-height: 80vh;
+  /* 有一定的高度 可以滚动 */
+  height: auto;
+  overflow: auto;
+  /* min-height: 100vh; */
+  position: relative;
 }
 .empty {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  /* position: absolute; */
+  left: 0;
+  right: 0;
+  top: 40%;
   text-align: center;
   z-index: 3;
-  margin-top: -20px;
+  /* transform: translate(0, -40%); */
+  margin-top: 30px;
   justify-content: center;
   display: flex;
   flex-direction: column;
@@ -483,4 +314,5 @@ export default {
   margin-top: 10px;
 }
 </style>
+
 ```

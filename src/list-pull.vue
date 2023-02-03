@@ -1,10 +1,11 @@
 <template>
   <van-pull-refresh
+    v-bind="$attrs"
+    v-on="$listeners"
     v-model="isTopPullLoading"
-    :success-text="textRefreshSuccess"
+    :success-text="$attrs.successText || '刷新成功'"
     @refresh="onTopPullRefresh"
-    :disabled="isDisabledRefresh"
-    
+
   >
     <template v-if="list.length">
       <van-list
@@ -45,9 +46,9 @@ export default {
     pageSize: {
       default: 10,
     },
-    isDisabledRefreshSet: {
-      default: false,
-    },
+    // isDisabledRefreshSet: {
+    //   default: false,
+    // },
     isDisabledPushSet: {
       default: false,
     },
@@ -61,9 +62,7 @@ export default {
     textEnd: {
       default: "已经到底了~",
     },
-    textRefreshSuccess: {
-      default: "刷新成功",
-    },
+   
   },
   components: {
     vanPullRefresh,
@@ -83,6 +82,9 @@ export default {
     this.requestInit();
   },
   computed: {
+    isDisabledRefreshSet(){
+      return this.$attrs.disabled
+    },
     /**
      * 显示空状态同时满足两个条件
      *  1. 请求过了
